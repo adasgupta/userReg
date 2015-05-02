@@ -10,7 +10,26 @@ app.config(['$routeProvider',
       when('/successPage', {
         templateUrl: 'successPage',
         controller: 'mainController'
-          });
+          }).
+      when('/updateSuccessPage', {
+        templateUrl: 'updateSuccessPage',
+        controller: 'mainController'
+      }).
+      when('/userRegPage', {
+        templateUrl: 'userRegPage',
+        controller: 'mainController'
+      }).
+      when('/userUpdatePage', {
+        templateUrl: 'userUpdatePage',
+        controller: 'mainController'
+      }).
+      when('/viewUsersPage', {
+        templateUrl: 'viewUsersPage',
+        controller: 'mainController'
+      }).
+      otherwise({
+        redirectTo: '/'
+      });
 }]); 
 
 app.controller('mainController',  function($scope, $http, $location) {
@@ -19,6 +38,8 @@ app.controller('mainController',  function($scope, $http, $location) {
     $scope.regData = {};
     $scope.isUniq = false;
     $scope.showForm = true;
+    $scope.updateForm = true;
+    $scope.showUpdateForm = false;
 
     // Get all user data
     $http.get('/api/v1/userData')
@@ -30,7 +51,7 @@ app.controller('mainController',  function($scope, $http, $location) {
             console.log('Error: ' + error);
         });
 
-        //go to success page
+        //go to next page
 
         $scope.goNext = function (hash) { 
             $location.path(hash);
@@ -49,7 +70,7 @@ app.controller('mainController',  function($scope, $http, $location) {
                     if(data.uniqueEmail=="yes"){
                         $scope.isUniq = false;
 
-                        $http.post('/pipe', $scope.formData)
+                        $http.post('/api/v1/registerUser', $scope.formData)
                         .success(function(data) {
                             $scope.formData = {};
                             $scope.regData = data;
@@ -80,6 +101,27 @@ app.controller('mainController',  function($scope, $http, $location) {
                 
             
         };
+     $scope.updateForm = function(){
+
+            $scope.showUpdateForm = true;
+            console.log('========inside====='+$scope.showUpdateForm)
+
+     }
+    
+    //update user info by passing in the email id
+
+      $scope.updateUser = function() {
+        $http.post('/api/v1/updateUser' ,$scope.formData)
+            .success(function(data) {
+                $scope.regData = data;
+                console.log(data);
+                $scope.updateForm = false;
+                $scope.goNext('/updateSuccessPage');
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };  
 
 
 });

@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html ng-app="regTodo">
   <head>
+    <style>
+        .ng-invalid.ng-dirty{
+           border-color: red !important;
+        }
+
+        .ng-valid.ng-dirty{
+           border-color: green !important;
+        }
+    </style>  
     <title>I did it!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- styles -->
@@ -12,52 +21,50 @@
 
     <div ng-view></div>
     
-    <div class="container" ng-show="showForm">
+    <div class="container" ng-show="updateForm">
 
       <div class="header">
-        <h1>User Registration Form</h1>
+        <h3>Update User Info Based on Email</h3>
         <hr>
-        <h1 class="lead">Please fill in the following details :</h1>
+       <!-- <h1 class="lead">Please fill in the following details :</h1> -->
       </div>
-      
-      <div class="todo-form" >
-        <form name = "regForm" ng-submit="regForm.$valid && createUser()" novalidate>
+      <form name = "provide_Email" >
           <div class="form-group">
+            <h4>Provide email of the user whose details are to be updated:</h4>
+           <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.input_email" required>
+          </div>
+       <!--   <button class="btn btn-primary btn-lg btn-block" ng-click="updateForm()" >Update</button> -->
+       </form>   
+      <br>
+
+     <form name = "updateForm" ng-submit="updateForm.$valid && updateUser()" novalidate >
+          <div class="form-group">
+            <h4>Enter New Details:</h4>
             <input type="text" class="form-control input-lg" placeholder="Enter first name..." ng-model="formData.firstname" ><br/>
             <input type="text" class="form-control input-lg" placeholder="Enter last name..." ng-model="formData.lastname" required><br/>
-            <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.email" required><br/>
+          <!--  <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.email" required>
             
-            <span class="help-inline" ng-show="isUniq" style="color:red;">Email already registered!</span>
+            <span class="help-inline" ng-show="isUniq" style="color:red;">Email already registered!</span> -->
             
             <input type="text" class="form-control input-lg" placeholder="Enter address..." ng-model="formData.address" ><br/>
-            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/><br/>
+            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/>
 
 
           </div>
-          <button type="submit" class="btn btn-primary btn-lg btn-block" >Register</button>
+          <button type="submit" class="btn btn-primary btn-lg btn-block" >Save Changes</button>
 
         </form>          
+        <br/>
 
-      </div>
-
-      <br>
-
-      <!--<div class="todo-list">
-        <ul ng-repeat="user in regData">
-          <li><h3>{{"Name : " + user.firstname +" "+ user.lastname }}<br/>Email : {{user.email}}
-           
-            
-          </li></h3><hr>
-        </ul>
-      </div>-->
+       
 
     </div>
       <br/>
-      <div ng-show="showForm">
+      <div ng-show="updateForm">
         <center>
           <a href="/" class="btn btn-default">Back to Menu</a>
         </center>
-       </div> 
+      </div>
     <!-- scripts -->
     <script src="http://code.jquery.com/jquery-1.11.2.min.js" type="text/javascript"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" type="text/javascript"></script>

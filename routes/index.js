@@ -4,7 +4,7 @@ var path = require('path');
 var pg = require('pg');
 var connectionString = 'pg://postgres:ILoveGod@1411@localhost:5432/Registration DB';
 
-router.post('/pipe', function(req, res) {
+router.post('/api/v1/registerUser', function(req, res) {
 
     var results = [];
 
@@ -86,6 +86,50 @@ router.post('/emailCheck', function(req, res) {
     });
 });
 
+//update user info using email of the user
+
+router.post('/api/v1/updateUser', function(req, res) {
+    console.log('--------inside update method of index.js---------');
+    console.log(req);
+
+    var results = [];
+
+    // Grab data from the URL parameters
+   // var param_id = req.params.usr_id;
+
+    // Grab data from http request
+    var data = {input: req.body.input_email , firstname: req.body.firstname, lastname: req.body.lastname , 
+                      address: req.body.address , cellphone: req.body.cellphone};
+
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, function(err, client, done) {
+
+        // SQL Query > Update Data
+        client.query("UPDATE userInfo SET firstname=($1), lastname=($2) , address=($3), cellphone=($4) WHERE email=($5)", [data.firstname, data.lastname, data.address,data.cellphone,data.input]);
+     
+        // SQL Query > Select Data
+        var query = client.query("SELECT * FROM userInfo ORDER BY firstname ASC");
+
+        // Stream results back one row at a time
+        query.on('row', function(row) {
+            results.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            client.end();
+            return res.json(results);
+        });
+
+        // Handle Errors
+        if(err) {
+          console.log(err);
+        }
+
+    });
+
+}); 
+
 
 router.get('/api/v1/userData', function(req, res) {
 
@@ -116,16 +160,35 @@ router.get('/api/v1/userData', function(req, res) {
     });
 
 });
+router.get('/userRegPage', function(req, res, next) {
+    console.log('------finally---');
+  res.sendFile(path.join(__dirname, '../views', 'index.html'));
+}); 
+
+router.get('/userUpdatePage', function(req, res, next) {
+    console.log('------finally---');
+  res.sendFile(path.join(__dirname, '../views', 'updateUserPage.html'));
+}); 
+
+router.get('/viewUsersPage', function(req, res, next) {
+    console.log('------finally---');
+  res.sendFile(path.join(__dirname, '../views', 'viewAllUsers.html'));
+}); 
 
 router.get('/successPage', function(req, res, next) {
 	console.log('------finally---');
   res.sendFile(path.join(__dirname, '../views', 'successPage.html'));
 }); 
 
+router.get('/updateSuccessPage', function(req, res, next) {
+    console.log('------updated---');
+  res.sendFile(path.join(__dirname, '../views', 'updateSuccessPage.html'));
+}); 
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   console.log('---here===')	;
-  res.sendFile(path.join(__dirname, '../views', 'index.html'));
+  res.sendFile(path.join(__dirname, '../views', 'menu.html'));
 });
 
 
