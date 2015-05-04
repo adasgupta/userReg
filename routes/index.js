@@ -3,6 +3,7 @@ var router = express.Router();
 var path = require('path');
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'pg://postgres:ILoveGod@1411@localhost:5432/Registration DB';
+console.log('---db url heroku---'+process.env.DATABASE_URL);
 //var connectionString = 'postgres://lyfkvuexkiumhn:6QpE6inPbwgSEeYU1gvD2j95Cb@ec2-54-163-227-94.compute-1.amazonaws.com:5432/ddg6sj7bgupvgl'
 
 router.post('/api/v1/registerUser', function(req, res) {

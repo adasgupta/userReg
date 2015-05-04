@@ -1,6 +1,6 @@
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL || 'pg://postgres:ILoveGod@1411@localhost:5432/Registration DB';
-
+console.log('---db url heroku in databasejs---'+process.env.DATABASE_URL);
 var client = new pg.Client(connectionString);
 client.connect();
 var query = client.query("CREATE TABLE userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone integer)");
