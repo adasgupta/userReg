@@ -1,7 +1,7 @@
 {
   "name": "node-postgres-reg",
-  "version": "0.0.0",
-  
+  "version": "0.1.3",
+
   "main": "app.js",
   "scripts": {
     "start": "supervisor ./bin/www"     
@@ -12,9 +12,14 @@
     "debug": "~2.1.1",
     "express": "~4.12.2",
     "jade": "~1.9.2",
+    "supervisor": "*",
     "morgan": "~1.5.1",
     "pg": "^4.3.0",
     "serve-favicon": "~2.2.0"
+  },
+  "engines": {
+    "node": "0.12.2",
+    "npm": "2.1.x"
   },
   "keywords": [
     "node",
