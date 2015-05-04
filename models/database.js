@@ -3,7 +3,7 @@ var connectionString = process.env.DATABASE_URL || 'pg://postgres:ILoveGod@1411@
 
 var client = new pg.Client(connectionString);
 client.connect();
-var query = client.query("CREATE TABLE userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone integer, isadmin boolean)");
+var query = client.query("CREATE TABLE userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone integer)");
 //var query1 = client.query("INSERT INTO userInfo(firstname,lastname,email,address,cellphone) values('Anannya','Dasgupta','adasgupta1@salesforce.com','50 south road kolkata','7569583914')");
 //var query1 = client.query("SELECT firstname, lastname,email,address,cellphone FROM userInfo ORDER BY lastname, firstname");
 
