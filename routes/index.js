@@ -17,7 +17,7 @@ router.post('/api/v1/registerUser', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        client.query("DROP TABLE IF EXISTS userInfo");
+        //client.query("DROP TABLE IF EXISTS userInfo");
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint)");
         // SQL Query > Insert Data
         client.query("INSERT INTO userInfo(firstname, lastname , email, address,cellphone) values($1, $2, $3, $4, $5)", [data.firstname, data.lastname , data.email , data.address, data.cellphone]);
@@ -54,7 +54,7 @@ router.post('/emailCheck', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        client.query("DROP TABLE IF EXISTS userInfo");
+        
         // SQL Query > Search Data
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint)");
         var query = client.query("SELECT firstname,lastname,email FROM userInfo where email= $1",[data.email]);
@@ -110,7 +110,6 @@ router.post('/api/v1/updateUser', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        client.query("DROP TABLE IF EXISTS userInfo");
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint)");
         // SQL Query > Update Data
         client.query("UPDATE userInfo SET firstname=($1), lastname=($2) , address=($3), cellphone=($4) WHERE email=($5)", [data.firstname, data.lastname, data.address,data.cellphone,data.input]);
@@ -145,7 +144,7 @@ router.get('/api/v1/userData', function(req, res) {
 
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
-        client.query("DROP TABLE IF EXISTS userInfo");
+
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint)");
         // SQL Query > Select Data
         var query = client.query("SELECT * FROM userInfo ORDER BY firstname ASC;");
