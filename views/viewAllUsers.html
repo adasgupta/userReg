@@ -10,11 +10,11 @@
   <body ng-controller="mainController">
 
 
-    <div ng-view></div>
+    <div ng-view> </div>
     
     
 
-      <div class="panel panel-default">
+      <div class="panel panel-default" ng-show="isAdmin">
         <!-- Default panel contents -->
         <div class="panel-heading"><h3 style="text-align:center;">List of Existing Users</h3></div>
         

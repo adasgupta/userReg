@@ -40,6 +40,7 @@ app.controller('mainController',  function($scope, $http, $location) {
     $scope.showForm = true;
     $scope.updateForm = true;
     $scope.showUpdateForm = false;
+    $scope.isAdmin = false;
 
     // Get all user data
     $http.get('/api/v1/userData')
@@ -123,6 +124,29 @@ app.controller('mainController',  function($scope, $http, $location) {
             });
     };  
 
+
+    //check for Admin user
+
+     /*
+    $scope.checkAdmin = function() {
+        $http.post('/api/v1/authorizeUser' ,$scope.formData)
+            .success(function(data) {
+              //  $scope.regData = data;
+                console.log(data);
+                if(data.isAdmin =="yes"){
+                        $scope.isAdmin = true;
+                
+                $scope.goNext('/viewUsersPage');
+              }else{
+                  console.log(data);
+                  $scope.isAdmin = false;
+                  $scope.goNext('/viewUsersPage');
+              }
+            })
+            .error(function(data) {
+                console.log('Error: ' + data);
+            });
+    };  */
 
 });
 
