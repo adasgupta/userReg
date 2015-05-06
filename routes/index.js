@@ -17,7 +17,7 @@ router.post('/api/v1/registerUser', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        client.query("DROP TABLE IF EXISTS userInfo");
+       // client.query("DROP TABLE IF EXISTS userInfo");
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean, pwd varchar(20))");
         // SQL Query > Insert Data
         client.query("INSERT INTO userInfo(firstname, lastname , email, address,cellphone,pwd.isAdmin) values($1, $2, $3, $4, $5, $6 , $7)", [data.firstname, data.lastname , data.email , data.address, data.cellphone, data.pwd, data.isAdmin]);
@@ -54,7 +54,7 @@ router.post('/emailCheck', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        
+        client.query("DROP TABLE IF EXISTS userInfo");
         // SQL Query > Search Data
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean,pwd varchar(20))");
         var query = client.query("SELECT firstname,lastname,email FROM userInfo where email= $1",[data.email]);
