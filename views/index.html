@@ -30,10 +30,11 @@
             <span class="help-inline" ng-show="isUniq" style="color:red;">Email already registered!</span>
             
             <input type="text" class="form-control input-lg" placeholder="Enter address..." ng-model="formData.address" ><br/>
-            <input type="password" class="form-control input-lg" placeholder="Enter password (max 12 characters).." ng-model="formData.pwd" ><br/>
             
-            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/><br/>
-
+            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/>
+            <input type="password" class="form-control input-lg" placeholder="Enter password (max 12 characters).." ng-model="formData.pwd" ><br/><br/>
+            
+            <label><input type="checkbox" ng-model="formData.isAdmin" >Admin?</label>
 
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block" >Register</button>

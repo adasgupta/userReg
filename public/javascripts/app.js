@@ -23,6 +23,11 @@ app.config(['$routeProvider',
         templateUrl: 'userUpdatePage',
         controller: 'mainController'
       }).
+      .
+      when('/authUser', {
+        templateUrl: 'authUser',
+        controller: 'mainController'
+      }).
       when('/viewUsersPage', {
         templateUrl: 'viewUsersPage',
         controller: 'mainController'
@@ -127,16 +132,16 @@ app.controller('mainController',  function($scope, $http, $location) {
 
     //check for Admin user
 
-     /*
+     
     $scope.checkAdmin = function() {
         $http.post('/api/v1/authorizeUser' ,$scope.formData)
             .success(function(data) {
               //  $scope.regData = data;
                 console.log(data);
                 if(data.isAdmin =="yes"){
-                        $scope.isAdmin = true;
+                 $scope.isAdmin = true;
                 
-                $scope.goNext('/viewUsersPage');
+                 $scope.goNext('/viewUsersPage');
               }else{
                   console.log(data);
                   $scope.isAdmin = false;
@@ -146,7 +151,7 @@ app.controller('mainController',  function($scope, $http, $location) {
             .error(function(data) {
                 console.log('Error: ' + data);
             });
-    };  */
+    }; 
 
 });
 
