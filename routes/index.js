@@ -179,7 +179,7 @@ router.get('/api/v1/authorizeUser', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
 
-        var data = { pwd: req.body.pwd ,email = req.body.email};
+        var data = { pwd: req.body.pwd ,email: req.body.email};
 
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,pwd varchar(20),isAdmin boolean");
         // SQL Query > Select Data
