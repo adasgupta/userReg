@@ -68,7 +68,7 @@ app.controller('mainController',  function($scope, $http, $location) {
         
         $scope.createUser= function() {
 
-
+          console.log('--------inside create user------------');
           $http.post('/emailCheck', $scope.formData)
                 .success(function(data) {
                  
