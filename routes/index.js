@@ -17,10 +17,10 @@ router.post('/api/v1/registerUser', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-       // client.query("DROP TABLE IF EXISTS userInfo");
+      //  client.query("DROP TABLE IF EXISTS userInfo");
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean, pwd varchar(20))");
         // SQL Query > Insert Data
-        client.query("INSERT INTO userInfo(firstname, lastname , email, address,cellphone,pwd.isAdmin) values($1, $2, $3, $4, $5, $6 , $7)", [data.firstname, data.lastname , data.email , data.address, data.cellphone, data.pwd, data.isAdmin]);
+        client.query("INSERT INTO userInfo(firstname, lastname , email, address,cellphone,pwd,isAdmin) values($1, $2, $3, $4, $5, $6 , $7)", [data.firstname, data.lastname , data.email , data.address, data.cellphone, data.pwd, data.isAdmin]);
 
         // SQL Query > Select Data
         var query = client.query("SELECT * FROM userInfo ORDER BY firstname ASC");
@@ -54,7 +54,7 @@ router.post('/emailCheck', function(req, res) {
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
         
-        client.query("DROP TABLE IF EXISTS userInfo");
+        //client.query("DROP TABLE IF EXISTS userInfo");
         // SQL Query > Search Data
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean,pwd varchar(20))");
         var query = client.query("SELECT firstname,lastname,email FROM userInfo where email= $1",[data.email]);
@@ -77,7 +77,7 @@ router.post('/emailCheck', function(req, res) {
             }
             else{
                 console.log('-----in else-------'+searchArr.length );
-                var resp = {uniqueEmail : "no"}
+                var resp = {uniqueEmail : "no"};
             	return res.json(resp);
             }
 
@@ -141,7 +141,7 @@ router.post('/api/v1/updateUser', function(req, res) {
 router.get('/api/v1/userData', function(req, res) {
 
     var results = [];
-
+    console.log('-------inside index.js userdata------------');
     // Get a Postgres client from the connection pool
     pg.connect(connectionString, function(err, client, done) {
 
@@ -169,10 +169,69 @@ router.get('/api/v1/userData', function(req, res) {
 
 });
 
+
+
+
+
+router.post('/api/v1/authorizeUser', function(req, res) {
+
+    var result ;
+
+    // Grab data from http request
+    var data = {email: req.body.email , pwd: req.body.pwd };
+    var searchArr = [];
+    // Get a Postgres client from the connection pool
+    pg.connect(connectionString, function(err, client, done) {
+        
+        //client.query("DROP TABLE IF EXISTS userInfo");
+        // SQL Query > Search Data
+        client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean,pwd varchar(20))");
+        var query = client.query("SELECT firstname,lastname,email,isAdmin,pwd FROM userInfo where email= $1 and isAdmin=true and pwd=$2",[data.email,data.pwd]);
+        console.log('------email-----'+data.email);
+        console.log(query);
+
+        query.on('row', function(row) {
+            searchArr.push(row);
+        });
+
+        // After all data is returned, close connection and return results
+        query.on('end', function() {
+            client.end();
+
+            if(searchArr.length == 0){
+                console.log('-----in if-------'+searchArr.length );
+                var resp = {isAdmin : "no"};
+                return res.json(resp);
+
+            }
+            else{
+                console.log('-----in else-------'+searchArr.length );
+                var resp = {isAdmin : "yes"};
+                return res.json(resp);
+            }
+
+                
+        });
+
+        // Handle Errors
+        if(err) {
+          console.log(err);
+        }
+
+    });
+});
+
+
+
+
+
+
+
 // check authorization for user to view user records
 
-
-router.get('/api/v1/authorizeUser', function(req, res) {
+/*
+router.post('/api/v1/authorizeUser', function(req, res) {
+    console.log('----------inside authorize user-----------');
 
     var results = [];
 
@@ -183,15 +242,27 @@ router.get('/api/v1/authorizeUser', function(req, res) {
 
         client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,pwd varchar(20),isAdmin boolean");
         // SQL Query > Select Data
-        var query = client.query("SELECT firstname,lastname,pwd,email FROM userInfo where isAdmin=true && email=$1 && pwd=$2",[data.email,data.pwd]);
+       
+        var query = client.query("SELECT firstname,lastname,pwd,email FROM userInfo where isAdmin=true and email=($1) and pwd=($2);",[data.email,data.pwd],
+             function(err, result) {
+                 console.log(err);
+                 console.log(result);
+             }
+
+            );
+       
+
         console.log(query);
-
+       
         query.on('row', function(row) {
+           
             results.push(row);
+            console.log('=======row'+results.length);
         });
-
+        
         // After all data is returned, close connection and return results
         query.on('end', function() {
+            
             client.end();
 
             if(results.length == 0){
@@ -202,18 +273,20 @@ router.get('/api/v1/authorizeUser', function(req, res) {
             }
             else{
                 console.log('-----Admin User!-------'+results.length );
-                var resp = {isAdmin : "yes"}
+                var resp = {isAdmin : "yes"};
                 return res.json(resp);
             }
         });  
 
          // Handle Errors
+
         if(err) {
+
           console.log(err);
         }  
 
-    });
-});
+    }); 
+});*/
 
 
 router.get('/userRegPage', function(req, res, next) {
@@ -229,6 +302,11 @@ router.get('/userUpdatePage', function(req, res, next) {
 router.get('/authUser', function(req, res, next) {
     console.log('------in auth user---');
   res.sendFile(path.join(__dirname, '../views', 'loginPage.html'));
+}); 
+
+router.get('/noAccess', function(req, res, next) {
+    console.log('------in auth user---');
+  res.sendFile(path.join(__dirname, '../views', 'noAccessPage.html'));
 }); 
 
 router.get('/viewUsersPage', function(req, res, next) {

@@ -23,13 +23,16 @@ app.config(['$routeProvider',
         templateUrl: 'userUpdatePage',
         controller: 'mainController'
       }).
-      .
       when('/authUser', {
         templateUrl: 'authUser',
         controller: 'mainController'
       }).
       when('/viewUsersPage', {
         templateUrl: 'viewUsersPage',
+        controller: 'mainController'
+      }).
+      when('/noAccess', {
+        templateUrl: 'noAccess',
         controller: 'mainController'
       }).
       otherwise({
@@ -46,8 +49,12 @@ app.controller('mainController',  function($scope, $http, $location) {
     $scope.updateForm = true;
     $scope.showUpdateForm = false;
     $scope.isAdmin = false;
+    $scope.loginShow = true;
+    
 
     // Get all user data
+    
+     
     $http.get('/api/v1/userData')
         .success(function(data) {
             $scope.regData = data;
@@ -56,6 +63,7 @@ app.controller('mainController',  function($scope, $http, $location) {
         .error(function(error) {
             console.log('Error: ' + error);
         });
+        
 
         //go to next page
 
@@ -63,6 +71,7 @@ app.controller('mainController',  function($scope, $http, $location) {
             $location.path(hash);
              }
  
+       
 
         // Create a new user
         
@@ -131,21 +140,23 @@ app.controller('mainController',  function($scope, $http, $location) {
 
 
     //check for Admin user
-
+   
      
     $scope.checkAdmin = function() {
+        console.log('=========inside checkadmin=======');
         $http.post('/api/v1/authorizeUser' ,$scope.formData)
             .success(function(data) {
               //  $scope.regData = data;
                 console.log(data);
                 if(data.isAdmin =="yes"){
                  $scope.isAdmin = true;
-                
+                 $scope.loginShow = false;
                  $scope.goNext('/viewUsersPage');
               }else{
                   console.log(data);
-                  $scope.isAdmin = false;
-                  $scope.goNext('/viewUsersPage');
+                //  $scope.isAdmin = false;
+                //  $scope.loginShow = true;
+                  $scope.goNext('/noAccess');
               }
             })
             .error(function(data) {
@@ -153,6 +164,6 @@ app.controller('mainController',  function($scope, $http, $location) {
             });
     }; 
 
-});
+}); 
 
 })();
