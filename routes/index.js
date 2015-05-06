@@ -56,10 +56,10 @@ router.post('/emailCheck', function(req, res) {
         
         
         // SQL Query > Search Data
-        client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean)");
+        client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean,pwd varchar(20))");
         var query = client.query("SELECT firstname,lastname,email FROM userInfo where email= $1",[data.email]);
         console.log('------email-----'+data.email);
-        console.log('------query-----'+query);
+        console.log(query);
 
         query.on('row', function(row) {
             searchArr.push(row);
@@ -217,12 +217,12 @@ router.get('/api/v1/authorizeUser', function(req, res) {
 
 
 router.get('/userRegPage', function(req, res, next) {
-    console.log('------finally---');
+    console.log('------in reg user---');
   res.sendFile(path.join(__dirname, '../views', 'index.html'));
 }); 
 
 router.get('/userUpdatePage', function(req, res, next) {
-    console.log('------finally---');
+    console.log('------in update user---');
   res.sendFile(path.join(__dirname, '../views', 'updateUserPage.html'));
 }); 
 
@@ -232,23 +232,23 @@ router.get('/authUser', function(req, res, next) {
 }); 
 
 router.get('/viewUsersPage', function(req, res, next) {
-    console.log('------finally---');
+    console.log('------in view all users---');
   res.sendFile(path.join(__dirname, '../views', 'viewAllUsers.html'));
 }); 
 
 router.get('/successPage', function(req, res, next) {
-	console.log('------finally---');
+	console.log('------in reg success page---');
   res.sendFile(path.join(__dirname, '../views', 'successPage.html'));
 }); 
 
 router.get('/updateSuccessPage', function(req, res, next) {
-    console.log('------updated---');
+    console.log('------in update success page---');
   res.sendFile(path.join(__dirname, '../views', 'updateSuccessPage.html'));
 }); 
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  console.log('---here===')	;
+  console.log('---in main menu===')	;
   res.sendFile(path.join(__dirname, '../views', 'menu.html'));
 });
 
