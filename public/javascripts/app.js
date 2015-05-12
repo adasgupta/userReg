@@ -50,6 +50,8 @@ app.controller('mainController',  function($scope, $http, $location) {
     $scope.showUpdateForm = false;
     $scope.isAdmin = false;
     $scope.loginShow = true;
+    $scope.emailInvalid = false;
+    
     
 
     // Get all user data
@@ -128,10 +130,17 @@ app.controller('mainController',  function($scope, $http, $location) {
       $scope.updateUser = function() {
         $http.post('/api/v1/updateUser' ,$scope.formData)
             .success(function(data) {
-                $scope.regData = data;
-                console.log(data);
+              if (data.existsEmail=="yes") {
+               // $scope.regData = data;
+                console.log('==========updation done successfully----------');
                 $scope.updateForm = false;
+                $scope.emailInvalid = false;
                 $scope.goNext('/updateSuccessPage');
+              }
+              else{
+                $scope.emailInvalid = true;
+
+              }
             })
             .error(function(data) {
                 console.log('Error: ' + data);

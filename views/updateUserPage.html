@@ -28,26 +28,34 @@
         <hr>
        <!-- <h1 class="lead">Please fill in the following details :</h1> -->
       </div>
-      <form name = "provide_Email" >
+     <!-- <form name = "provide_Email" > -->
+     <form name = "updateForm" ng-submit="updateForm.$valid && updateUser()" novalidate >
           <div class="form-group">
             <h4>Provide email of the user whose details are to be updated:</h4>
-           <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.input_email" required>
+            <span class="help-inline" ng-show="updateForm.$submitted && updateForm.email.$invalid" style="color:red;">Enter a valid email address</span>
+            <span class="help-inline" ng-show="emailInvalid" style="color:red;">Email not registered! Please ensure that you enter a registered email address.</span>
+           <input id="email" type="email" name="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.input_email" required>
           </div>
-       <!--   <button class="btn btn-primary btn-lg btn-block" ng-click="updateForm()" >Update</button> -->
-       </form>   
+       <!--   <button class="btn btn-primary btn-lg btn-block" ng-click="updateForm()" >Update</button> 
+       </form>-->   
       <br>
 
-     <form name = "updateForm" ng-submit="updateForm.$valid && updateUser()" novalidate >
+   <!--  <form name = "updateForm" ng-submit="updateForm.$valid && updateUser()" novalidate > -->
           <div class="form-group">
             <h4>Enter New Details:</h4>
             <input type="text" class="form-control input-lg" placeholder="Enter first name..." ng-model="formData.firstname" ><br/>
-            <input type="text" class="form-control input-lg" placeholder="Enter last name..." ng-model="formData.lastname" required><br/>
+
+            
+            <input type="text" name="lname" class="form-control input-lg" placeholder="Enter last name..." ng-model="formData.lastname" ><br/>
           <!--  <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.email" required>
             
             <span class="help-inline" ng-show="isUniq" style="color:red;">Email already registered!</span> -->
             
             <input type="text" class="form-control input-lg" placeholder="Enter address..." ng-model="formData.address" ><br/>
-            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/>
+
+
+            <span class="help-inline" ng-show="updateForm.$submitted && updateForm.tel.$invalid" style="color:red;">Enter a valid 10 digit cellphone number</span>
+            <input type="tel" name="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" ng-minlength="10"><br/>
 
 
           </div>

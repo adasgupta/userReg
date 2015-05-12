@@ -99,33 +99,73 @@ router.post('/api/v1/updateUser', function(req, res) {
     console.log(req);
 
     var results = [];
+    var searchArr = [];
 
     // Grab data from the URL parameters
    // var param_id = req.params.usr_id;
-
+   pg.connect(connectionString, function(err, client, done) {
     // Grab data from http request
     var data = {input: req.body.input_email , firstname: req.body.firstname, lastname: req.body.lastname , 
                       address: req.body.address , cellphone: req.body.cellphone};
 
-    // Get a Postgres client from the connection pool
-    pg.connect(connectionString, function(err, client, done) {
-        
-        client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,pwd varchar(20),isAdmin boolean)");
-        // SQL Query > Update Data
-        client.query("UPDATE userInfo SET firstname=($1), lastname=($2) , address=($3), cellphone=($4) WHERE email=($5)", [data.firstname, data.lastname, data.address,data.cellphone,data.input]);
-     
-        // SQL Query > Select Data
-        var query = client.query("SELECT * FROM userInfo ORDER BY firstname ASC");
 
-        // Stream results back one row at a time
+
+    client.query("CREATE TABLE IF NOT EXISTS userInfo(id serial primary key ,firstname varchar(50),lastname varchar(50),email varchar(80),address varchar(200),cellphone bigint,isAdmin boolean,pwd varchar(20))");
+        var query = client.query("SELECT firstname,lastname,email FROM userInfo where email= $1",[data.input]);
+        console.log('------email-----'+data.input);
+        console.log('------firstname-----'+data.firstname);
+        console.log('------lastname-----'+data.lastname);
+        console.log('------address-----'+data.address);
+        console.log('------cellphone-----'+data.cellphone);
+        console.log(query);
+
         query.on('row', function(row) {
-            results.push(row);
+            searchArr.push(row);
         });
 
         // After all data is returned, close connection and return results
         query.on('end', function() {
-            client.end();
-            return res.json(results);
+            
+
+            if(searchArr.length == 0){
+                console.log('-----no email exists-------'+searchArr.length );
+                var resp = {existsEmail : "no"};
+                return res.json(resp);
+
+            }
+            else{
+                console.log('-----email exists------'+searchArr.length );
+                var resp = {existsEmail : "yes"};
+
+                if(data.firstname!=undefined){
+                    console.log('--firstname entered--');
+                    client.query("UPDATE userInfo SET firstname=($1) WHERE email=($2)", [data.firstname,data.input]);
+
+                }
+
+
+                if(data.lastname!=undefined){
+                    console.log('--lastname entered--');
+                    client.query("UPDATE userInfo SET lastname=($1) WHERE email=($2)", [data.lastname,data.input]);
+
+                }
+            
+
+                if(data.address!=undefined){
+                    console.log('--address entered--');
+                    client.query("UPDATE userInfo SET address=($1) WHERE email=($2)", [data.address,data.input]);
+
+                }
+
+                if(data.cellphone!=undefined){
+                    console.log('--cellphone entered--');
+                    client.query("UPDATE userInfo SET cellphone=($1) WHERE email=($2)", [data.cellphone,data.input]);
+
+                }
+                return res.json(resp);
+            }
+                client.end();
+                
         });
 
         // Handle Errors
@@ -133,9 +173,11 @@ router.post('/api/v1/updateUser', function(req, res) {
           console.log(err);
         }
 
+     });
+
     });
 
-}); 
+
 
 
 router.get('/api/v1/userData', function(req, res) {

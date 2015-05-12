@@ -24,17 +24,24 @@
         <form name = "regForm" ng-submit="regForm.$valid && createUser()" novalidate>
           <div class="form-group">
             <input type="text" class="form-control input-lg" placeholder="Enter first name..." ng-model="formData.firstname" ><br/>
-            <input type="text" class="form-control input-lg" placeholder="Enter last name..." ng-model="formData.lastname" required><br/>
-            <input id="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.email" required><br/>
+
+            <span class="help-inline" ng-show="regForm.$submitted && regForm.lname.$invalid" style="color:red;">Enter Last Name</span>
+            <input type="text" name="lname" class="form-control input-lg" placeholder="Enter last name..." ng-model="formData.lastname" required><br/>
             
+            <span class="help-inline" ng-show="regForm.$submitted && regForm.email.$invalid" style="color:red;">Enter a valid email address</span>
             <span class="help-inline" ng-show="isUniq" style="color:red;">Email already registered!</span>
+            <input id="email" name="email" type="email" class="form-control input-lg " placeholder="Enter email..." ng-model="formData.email" required><br/>
+            
             
             <input type="text" class="form-control input-lg" placeholder="Enter address..." ng-model="formData.address" ><br/>
+
+            <span class="help-inline" ng-show="regForm.$submitted && regForm.tel.$invalid" style="color:red;">Enter a valid 10 digit cellphone number</span>
+            <input type="tel" name="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/>
+
+            <span class="help-inline" ng-show="regForm.$submitted && regForm.pwd.$invalid" style="color:red;">Enter a password having min 5 and max 15 characters</span>
+            <input type="password" name="pwd" class="form-control input-lg" placeholder="Enter password (5-15 characters).." ng-model="formData.pwd" ng-minlength="5" ng-maxlength="15" required><br/><br/>
             
-            <input type="tel" pattern="[0-9]{10}" class="form-control input-lg" placeholder="Enter cellphone num..." ng-model="formData.cellphone" required><br/>
-            <input type="password" class="form-control input-lg" placeholder="Enter password (max 12 characters).." ng-model="formData.pwd" ><br/><br/>
-            
-            <input type="checkbox" class="form-control input-lg" ng-model="formData.isAdmin" >Admin?</input>
+            Admin? <input type="checkbox"  ng-model="formData.isAdmin" ></input>
 
           </div>
           <button type="submit" class="btn btn-primary btn-lg btn-block" >Register</button>
